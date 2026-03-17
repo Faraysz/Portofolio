@@ -1,126 +1,336 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio - Jay</title>
+    <title>Portfolio - Faraytodi</title>
 
     <style>
+        :root {
+            --bg: #0b1120;
+            --text: #eaf2ff;
+            --muted: #9ca3af;
+            --primary: #4f46e5;
+            --card: rgba(20, 30, 50, 0.75);
+            --glass: rgba(255, 255, 255, 0.08);
+            --shadow: 0 12px 30px rgba(32, 42, 86, 0.35);
+        }
+
+        * { box-sizing: border-box; }
+
         body {
             margin: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #f4f6f9;
-            color: #333;
+            font-family: 'Segoe UI', 'Poppins', sans-serif;
+            color: var(--text);
+            background: radial-gradient(circle at 20% 20%, #1a3b6f 0%, #0b1120 45%, #080d1a 100%);
+        }
+
+        .float-bg {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .float-bg span {
+            position: absolute;
+            display: block;
+            border-radius: 50%;
+            background: rgba(79, 70, 229, 0.28);
+            animation: drift 14s infinite ease-in-out;
+            filter: blur(5px);
+        }
+
+        @keyframes drift {
+            0% { transform: translate(0,0) scale(0.5); opacity: 0.25; }
+            50% { transform: translate(25vw, -22vh) scale(1); opacity: 0.8; }
+            100% { transform: translate(-5vw, 25vh) scale(0.6); opacity: 0.2; }
         }
 
         header {
-            background: #0f172a;
-            color: white;
-            padding: 40px 20px;
+            padding: 90px 24px 70px;
             text-align: center;
+            background: linear-gradient(140deg, rgba(15, 23, 42, 0.9), rgba(7, 11, 25, 0.86));
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            position: relative;
+            overflow: hidden;
         }
 
         header h1 {
             margin: 0;
-            font-size: 36px;
+            font-size: clamp(2rem, 4vw, 3.6rem);
+            letter-spacing: 0.01em;
+            text-shadow: 0 12px 30px rgba(0,0,0,0.35);
         }
 
         header p {
-            margin-top: 10px;
-            font-size: 18px;
-            color: #cbd5e1;
+            margin: 16px auto 0;
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            color: var(--muted);
+            min-height: 1.4em;
+        }
+
+        header .top-btns {
+            margin-top: 24px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .glow-btn {
+            border: 1px solid rgba(79, 70, 229, 0.8);
+            background: rgba(79, 70, 229, 0.2);
+            color: #e8ecff;
+            padding: 10px 18px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 0 18px rgba(79, 70, 229, 0.5);
+            transition: transform .22s ease, background .25s ease;
+        }
+
+        .glow-btn:hover { transform: translateY(-2px); background: rgba(79, 70, 229, 0.35); }
+
+        .container {
+            width: min(1100px, 92%);
+            margin: 0 auto;
+            padding: 60px 0;
         }
 
         section {
-            padding: 50px 20px;
-            max-width: 900px;
-            margin: auto;
+            margin-bottom: 44px;
+            opacity: 0;
+            transform: translateY(28px);
+            transition: all .8s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        h2 {
-            border-left: 5px solid #2563eb;
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        section h2 {
+            margin: 0 0 20px;
+            font-size: 1.8rem;
+            border-left: 4px solid var(--primary);
             padding-left: 10px;
         }
 
         .card {
-            background: white;
-            padding: 20px;
-            margin-top: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            background: var(--card);
+            border: 1px solid rgba(255,255,255,0.12);
+            backdrop-filter: blur(10px);
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            padding: 22px;
+            margin-bottom: 18px;
+            transition: transform .25s ease, box-shadow .25s ease;
         }
 
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background: #2563eb;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            margin-top: 10px;
+        .card:hover { transform: translateY(-4px); box-shadow: 0 20px 35px rgba(8, 17, 36, 0.4); }
+
+        .skill-list {
+            display: grid;
+            gap: 14px;
         }
 
-        .btn:hover {
-            background: #1e40af;
+        .skill {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95rem;
+            color: #ced9ff;
         }
+
+        .progress {
+            border-radius: 999px;
+            overflow: hidden;
+            background: rgba(255,255,255,0.12);
+            height: 12px;
+            margin-top: 6px;
+        }
+
+        .progress > div {
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #9333ea);
+            width: 0;
+            transition: width 1s ease;
+        }
+
+        .project-grid { display: grid; gap: 16px; }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .tag {
+            background: rgba(51, 65, 85, 0.7);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            color: #e5e7eb;
+            border-radius: 999px;
+            padding: 7px 13px;
+            cursor: pointer;
+            user-select: none;
+            transition: all .2s ease;
+        }
+
+        .tag.active { background: #4f46e5; border-color: #603feb; }
+
+        .dark .glass, .dark .card { background: rgba(10, 14, 26, 0.82); }
+        .dark body { background: radial-gradient(circle at 20% 20%, #132145 0%, #060916 42%, #02040a 100%); }
+        .dark .text-muted { color: #9ca3af; }
+
+        .contact-status { margin-top: 12px; color: #a5f3fc; }
 
         footer {
+            padding: 22px 0;
             text-align: center;
-            padding: 20px;
-            background: #0f172a;
-            color: white;
-            margin-top: 40px;
+            color: #b8c4d8;
+            font-size: 0.9rem;
+        }
+
+        @media (min-width: 760px) {
+            .project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * { animation: none !important; transition: none !important; }
         }
     </style>
 </head>
 <body>
 
+    <div class="float-bg" aria-hidden="true">
+        <span style="width:120px; height:120px; left: 8%; top: 20%; animation-delay:0s;"></span>
+        <span style="width:90px; height:90px; left: 84%; top: 46%; animation-delay:2s;"></span>
+        <span style="width:140px; height:140px; left: 55%; top: 75%; animation-delay:5s;"></span>
+    </div>
+
     <header>
-        <h1>Halo, Saya Faraytodi Atmajaya 👋</h1>
-        <p>Mahasiswa | Tech Enthusiast | Future Developer</p>
+        <h1>Hai, Saya Faraytodi Atmajaya 👋</h1>
+        <p id="typed">Mahasiswa | Tech Enthusiast | Future Developer</p>
+        <div class="top-btns">
+            <a class="glow-btn" href="#project">Lihat Project</a>
+            <a class="glow-btn" href="#kontak">Hubungi</a>
+            <a class="glow-btn" id="modeToggle" href="javascript:void(0);">Mode Gelap</a>
+        </div>
     </header>
 
-    <section>
-        <h2>Tentang Saya</h2>
-        <div class="card">
-            <p>
-                Saya seorang mahasiswa yang tertarik pada dunia teknologi,
-                machine learning, dan pengembangan aplikasi. 
-                Saya suka membangun project untuk belajar dan berkembang.
-            </p>
-        </div>
-    </section>
+    <main class="container">
+        <section id="tentang" class="reveal">
+            <h2>Tentang Saya</h2>
+            <article class="card">
+                <p>Saya adalah mahasiswa yang bersemangat menguasai machine learning, web modern, dan solusi cloud. Saya membangun project nyata untuk memperkuat skill, ikut kompetisi, dan berkontribusi pada komunitas IT.</p>
+                <div class="skill-list">
+                    <div class="skill"><span>Python</span><span>90%</span></div>
+                    <div class="progress"><div class="progress-bar" data-width="90%"></div></div>
+                    <div class="skill"><span>JavaScript</span><span>85%</span></div>
+                    <div class="progress"><div class="progress-bar" data-width="85%"></div></div>
+                    <div class="skill"><span>Machine Learning</span><span>75%</span></div>
+                    <div class="progress"><div class="progress-bar" data-width="75%"></div></div>
+                </div>
+            </article>
+        </section>
 
-    <section>
-        <h2>Project Saya</h2>
-        <div class="card">
-            <h3>Password Manager (Python)</h3>
-            <p>Aplikasi sederhana untuk menyimpan dan mengelola password secara aman.</p>
-        </div>
+        <section id="project" class="reveal">
+            <h2>Project Saya</h2>
+            <div class="filters" aria-label="Filter project">
+                <span class="tag active" data-filter="all">Semua</span>
+                <span class="tag" data-filter="python">Python</span>
+                <span class="tag" data-filter="typescript">TypeScript</span>
+                <span class="tag" data-filter="ml">Machine Learning</span>
+            </div>
+            <div class="project-grid">
+                <article class="card project" data-category="python">
+                    <h3>Password Manager</h3>
+                    <p>Aplikasi aman untuk penyimpanan dan enkripsi password dengan antarmuka CLI.</p>
+                </article>
+                <article class="card project" data-category="typescript">
+                    <h3>Currency Converter CLI</h3>
+                    <p>CLI tool untuk konversi mata uang real-time menggunakan API eksternal.</p>
+                </article>
+                <article class="card project" data-category="ml">
+                    <h3>Stock Decision Support System</h3>
+                    <p>Sistem rekomendasi investasi saham dengan algoritma machine learning.</p>
+                </article>
+                <article class="card project" data-category="ml">
+                    <h3>Image Classifier</h3>
+                    <p>Model klasifikasi gambar menggunakan CNN untuk deteksi objek sederhana.</p>
+                </article>
+            </div>
+        </section>
 
-        <div class="card">
-            <h3>Currency Converter CLI (TypeScript)</h3>
-            <p>Aplikasi konversi mata uang berbasis command line.</p>
-        </div>
-
-        <div class="card">
-            <h3>Stock Decision Support System</h3>
-            <p>Sistem pendukung keputusan untuk analisa tren saham.</p>
-        </div>
-    </section>
-
-    <section>
-        <h2>Kontak</h2>
-        <div class="card">
-            <p>Email: faraytodi.atmajaya@email.com</p>
-            <p>LinkedIn: linkedin.com/in/faraytodi-atmajaya</p>
-            <a href="#" class="btn">Hubungi Saya</a>
-        </div>
-    </section>
+        <section id="kontak" class="reveal">
+            <h2>Kontak</h2>
+            <article class="card">
+                <p>📧 faraytodi.atmajaya@email.com</p>
+                <p>🔗 <a class="glow-btn" href="https://linkedin.com/in/faraytodi-atmajaya" target="_blank">LinkedIn</a></p>
+                <button class="glow-btn" id="contactBtn">Kirim Sinyal 🚀</button>
+                <p class="contact-status" id="contactStatus"></p>
+            </article>
+        </section>
+    </main>
 
     <footer>
-        © 2026 Bos Portfolio | Dibuat dengan semangat belajar 🚀
+        © 2026 Faraytodi Atmajaya | Dibuat dengan semangat penuh inovasi.
     </footer>
+
+    <script>
+        const typedText = ['Mahasiswa', 'Tech Enthusiast', 'Future Developer'];
+        const typedEl = document.getElementById('typed');
+        let i = 0, j = 0;
+
+        function animateType() {
+            const current = typedText[i];
+            typedEl.textContent = current.slice(0, j) + (j % 2 === 0 ? '|' : '');
+            j++;
+            if(j > current.length) {
+                i = (i + 1) % typedText.length;
+                j = 0;
+                setTimeout(animateType, 550);
+            } else setTimeout(animateType, 100);
+        }
+        animateType();
+
+        const revealEls = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.2 });
+        revealEls.forEach(el => observer.observe(el));
+
+        document.getElementById('modeToggle').addEventListener('click', () => {
+            document.body.classList.toggle('dark');
+            const active = document.body.classList.contains('dark');
+            document.getElementById('modeToggle').textContent = active ? 'Mode Terang' : 'Mode Gelap';
+        });
+
+        document.querySelectorAll('.progress-bar').forEach(bar => {
+            const w = bar.dataset.width;
+            setTimeout(() => { bar.style.width = w; }, 250);
+        });
+
+        document.querySelectorAll('.tag').forEach(tag => {
+            tag.addEventListener('click', () => {
+                document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
+                tag.classList.add('active');
+                const filter = tag.dataset.filter;
+                document.querySelectorAll('.project').forEach(p => {
+                    p.style.display = (filter === 'all' || p.dataset.category === filter) ? 'block' : 'none';
+                });
+            });
+        });
+
+        document.getElementById('contactBtn').addEventListener('click', () => {
+            const status = document.getElementById('contactStatus');
+            status.textContent = 'Terima kasih! Email akan segera diproses. ✨';
+            setTimeout(() => status.textContent = '', 4000);
+        });
+    </script>
 
 </body>
 </html>
